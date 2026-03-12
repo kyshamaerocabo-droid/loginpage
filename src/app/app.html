@@ -1,40 +1,119 @@
-<div class="container">
+<!-- LOGIN / REGISTER -->
+<div *ngIf="!showDashboard" class="auth-container">
 
-  <!-- Success -->
-  <div *ngIf="isSuccess" class="success-box">
-    <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="success">
-    <h2>Login Successful!</h2>
-    <button (click)="goToLogin()">Back</button>
+  <div class="purple-container">
+
+    <!-- LOGIN FORM -->
+    <div *ngIf="isLoginMode" class="form-box">
+      <h2>Login</h2>
+      <p class="subtitle">Welcome back! Please login to your account.</p>
+
+      <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+          <input type="email" formControlName="email" placeholder="Email">
+          <small *ngIf="submitted && f['email']?.errors">Valid email is required</small>
+        </div>
+
+        <div class="form-group">
+          <input type="password" formControlName="password" placeholder="Password">
+          <small *ngIf="submitted && f['password']?.errors">Password must be at least 6 characters</small>
+        </div>
+
+        <button type="submit" [disabled]="isSubmitting">{{ isSubmitting ? 'Please wait...' : 'Login' }}</button>
+
+      </form>
+
+      <p class="switch">Don't have an account? <a (click)="toggleMode()">Register</a></p>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div *ngIf="!isLoginMode" class="form-box">
+      <h2>Create Account</h2>
+      <p class="subtitle">Sign up and start using your account.</p>
+
+      <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+          <input type="text" formControlName="username" placeholder="Username">
+          <small *ngIf="submitted && f['username']?.errors">Username is required</small>
+        </div>
+
+        <div class="form-group">
+          <input type="email" formControlName="email" placeholder="Email">
+          <small *ngIf="submitted && f['email']?.errors">Valid email is required</small>
+        </div>
+
+        <div class="form-group">
+          <input type="password" formControlName="password" placeholder="Password">
+          <small *ngIf="submitted && f['password']?.errors">Password must be at least 6 characters</small>
+        </div>
+
+        <button type="submit" [disabled]="isSubmitting">{{ isSubmitting ? 'Please wait...' : 'Register' }}</button>
+
+      </form>
+
+      <p class="switch">Already have an account? <a (click)="toggleMode()">Login</a></p>
+    </div>
+
+  </div>
+</div>
+
+<!-- DASHBOARD (example for admin and student) -->
+<div *ngIf="showDashboard && currentRole === 'admin'" class="dashboard">
+
+  <div class="topbar">
+    <div class="welcome">
+      <h2>Welcome Back Admin 👑</h2>
+      <p>Manage your system from your dashboard</p>
+    </div>
+    <button class="logout-btn" (click)="logout()">Logout</button>
   </div>
 
-  <!-- Login -->
-  <div *ngIf="isLoginView && !isSuccess" class="form-box">
-    <h2>Login</h2>
-
-    <input type="email" placeholder="Email" [(ngModel)]="email">
-    <input type="password" placeholder="Password" [(ngModel)]="password">
-
-    <button (click)="login()">Login</button>
-
-    <p>
-      Don't have an account?
-      <a (click)="goToRegister()">Register here</a>
-    </p>
+  <div class="cards">
+    <div class="card-box">
+      <h3>Users</h3>
+      <p>Manage registered users</p>
+    </div>
+    <div class="card-box">
+      <h3>Admin Tools</h3>
+      <p>Control admin settings</p>
+    </div>
+    <div class="card-box">
+      <h3>Students</h3>
+      <p>View student records</p>
+    </div>
+    <div class="card-box">
+      <h3>Reports</h3>
+      <p>Generate system reports</p>
+    </div>
   </div>
 
-  <!-- Register -->
-  <div *ngIf="!isLoginView" class="form-box">
-    <h2>Register</h2>
+</div>
 
-    <input type="email" placeholder="Email" [(ngModel)]="regEmail">
-    <input type="password" placeholder="Password" [(ngModel)]="regPassword">
+<div *ngIf="showDashboard && currentRole === 'student'" class="dashboard">
 
-    <button (click)="register()">Register</button>
+  <div class="topbar">
+    <div class="welcome">
+      <h2>Student Dashboard 🎓</h2>
+      <p>Welcome student! View your academic information.</p>
+    </div>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
 
-    <p>
-      Already have an account?
-      <a (click)="goToLogin()">Login here</a>
-    </p>
+  <div class="cards">
+    <div class="card-box">
+      <h3>My Profile</h3>
+      <p>View your personal information</p>
+    </div>
+    <div class="card-box">
+      <h3>My Subjects</h3>
+      <p>Check your enrolled courses</p>
+    </div>
+    <div class="card-box">
+      <h3>Grades</h3>
+      <p>View your academic grades</p>
+    </div>
   </div>
 
 </div>
